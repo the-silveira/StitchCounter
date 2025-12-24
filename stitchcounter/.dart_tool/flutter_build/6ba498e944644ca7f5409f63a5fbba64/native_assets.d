@@ -1,1 +1,0 @@
- C:\\Users\\Guite\\Desktop\\stitchcounter\\.dart_tool\\flutter_build\\6ba498e944644ca7f5409f63a5fbba64\\native_assets.yaml: 
