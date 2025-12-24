@@ -101,12 +101,15 @@ build/app/outputs/bundle/release/app-release.aab
 ```
 lib/
 ├── main.dart
-├── theme.dart
-├── models.dart
+└── services/
+   ├── theme.dart
+└── models/
+   ├── roundCounter.dart
+   ├── stitchCounter.dart
 ├── controllers/
 │   └── counter_controller.dart
-├── screens/
-│   └── main_screen.dart
+├── UI/
+│   └── counterUI.dart
 └── widgets/
     ├── stitch_counter_widget.dart
     └── round_counter_widget.dart
