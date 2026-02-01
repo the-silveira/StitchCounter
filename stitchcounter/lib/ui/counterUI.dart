@@ -1,102 +1,101 @@
-// screens/main_screen.dart
 import 'package:flutter/material.dart';
 import 'package:stitchcounter/controller/counterController.dart';
+import 'package:stitchcounter/models/project.dart';
+
 import 'package:stitchcounter/widgets/roundCounterWidget.dart';
 import 'package:stitchcounter/widgets/stitchCounterWidget.dart';
 
-class CounterUI extends StatefulWidget {
-  const CounterUI({super.key});
-
+class MainScreen extends StatefulWidget {
+  final Project project;
+  
+  const MainScreen({super.key, required this.project});
+  
   @override
-  State<CounterUI> createState() => _CounterUIState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _CounterUIState extends State<CounterUI> {
-  final CounterController _controller = CounterController();
+class _MainScreenState extends State<MainScreen> {
+  late CounterController _controller;
+  
+  @override
+  void initState() {
+    super.initState();
+    _controller = CounterController(project: widget.project);
+  }
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(45), // Reduced from default 56
-        child: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.eco,
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-                size: 24, // Slightly smaller icon
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.eco,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              size: 24,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              _controller.project.name,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
-              const SizedBox(width: 8), // Reduced spacing
-              const Text(
-                'Crochet Helper',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18, // Reduced font size
-                ),
-              ),
-              const SizedBox(width: 8), // Reduced spacing
-              Icon(
-                Icons.eco,
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-                size: 24, // Slightly smaller icon
-              ),
-            ],
-          ),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          foregroundColor: Colors.white,
-          elevation: 2, // Reduced elevation
-          centerTitle: true,
+            ),
+            const SizedBox(width: 8),
+            Icon(
+              Icons.eco,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              size: 24,
+            ),
+          ],
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Colors.white,
+        elevation: 2,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => _controller.goToProjects(context),
         ),
       ),
       body: OrientationBuilder(
         builder: (context, orientation) {
-          // Force landscape layout
           return Row(
             children: [
-              // Left side - Stitch Counter (takes half)
               Expanded(
                 child: StitchCounterWidget(
-                  counter: _controller.stitchCounter,
-                  onIncrement: () =>
-                      setState(() => _controller.incrementStitch()),
-                  onReset: () => setState(() => _controller.resetStitch()),
-                  onDecrease: () =>
-                      setState(() => _controller.decreaseStitch()),
+                  counter: _controller.project.stitch,
+                  onIncrement:  _controller.incrementStitch,
+                  onReset:  _controller.resetStitch,
+                  onDecrease: _controller.decreaseStitch,
                 ),
               ),
-
-              // Vertical Divider
-              Container(
-                width: 1,
-                color: Colors.grey[300],
-              ),
-
-              // Right side - Round Counter (takes half)
+              Container(width: 1, color: Colors.grey[300]),
               Expanded(
                 child: RoundCounterWidget(
-                  counter: _controller.roundCounter,
-                  onIncrement: () =>
-                      setState(() => _controller.incrementRound()),
-                  onReset: () => setState(() => _controller.resetRound()),
-                  onDecrease: () => setState(() => _controller.decreaseRound()),
+                  counter: _controller.project.round,
+                  onIncrement: _controller.incrementRound,
+                  onReset: _controller.resetRound,
+                  onDecrease: _controller.decreaseRound,
                 ),
               ),
             ],
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _controller.resetAll();
-          });
-        },
-        backgroundColor: Theme.of(context).colorScheme.onPrimary,
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        child: const Icon(Icons.refresh),
-      ),
+      floatingActionButton: 
+          FloatingActionButton(
+            onPressed: _controller.resetAll,
+            backgroundColor: Theme.of(context).colorScheme.onPrimary,
+            foregroundColor: Theme.of(context).colorScheme.primary,
+            heroTag: 'reset',
+            child: const Icon(Icons.refresh),
+          ),
+        
+      
     );
   }
 }

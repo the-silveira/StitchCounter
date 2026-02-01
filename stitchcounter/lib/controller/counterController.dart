@@ -1,41 +1,63 @@
-import 'package:stitchcounter/models/roundCounter.dart';
-import 'package:stitchcounter/models/stitchCounter.dart';
+import 'package:flutter/material.dart';
+import 'package:stitchcounter/models/project.dart';
+import 'package:stitchcounter/services/storageService.dart';
+import 'package:stitchcounter/ui/projectsUI.dart';
+
 
 class CounterController {
-  final StitchCounter stitchCounter;
-  final RoundCounter roundCounter;
-
-  CounterController()
-      : stitchCounter = StitchCounter(0),
-        roundCounter = RoundCounter(0);
-
+  Project project;
+  
+  CounterController({required this.project});
+  
   void incrementStitch() {
-    stitchCounter.increment();
+    project.stitch.increment();
+    _saveProject();
   }
-
+  
   void decreaseStitch() {
-    stitchCounter.decrease();
+    project.stitch.decrease();
+    _saveProject();
   }
-
-  void incrementRound() {
-    roundCounter.increment();
-    stitchCounter.reset();
-  }
-
-  void decreaseRound() {
-    roundCounter.decrease();
-  }
-
+  
   void resetStitch() {
-    stitchCounter.reset();
+    project.stitch.reset();
+    _saveProject();
   }
-
+  
+  void incrementRound() {
+    project.round.increment();
+    project.stitch.reset();
+    _saveProject();
+  }
+  
+  void decreaseRound() {
+    project.round.decrease();
+    _saveProject();
+  }
+  
   void resetRound() {
-    roundCounter.reset();
+    project.round.reset();
+    _saveProject();
+  }
+  
+  void resetAll() {
+    project.stitch.reset();
+    project.round.reset();
+    _saveProject();
+  }
+  
+  Future<void> _saveProject() async {
+    await StorageService.updateProject(project);
   }
 
-  void resetAll() {
-    resetStitch();
-    resetRound();
+  void goToProjects(BuildContext context) {
+   
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ProjectsScreen(),
+      ),
+    );
+  
   }
 }
