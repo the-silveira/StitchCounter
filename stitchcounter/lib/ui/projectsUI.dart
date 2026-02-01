@@ -25,45 +25,44 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
   
   @override
   Widget build(BuildContext context) {
-
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-     appBar: AppBar(
-  title: const Text('My Projects'),
-  backgroundColor: Theme.of(context).colorScheme.primary,
-  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-  actions: [
-    IconButton(
-      icon: const Icon(Icons.color_lens),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const ColorHelperScreen(),
+      backgroundColor: colorScheme.surface,
+      appBar: AppBar(
+        title: const Text('My Projects'),
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.color_lens),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ColorHelperScreen(),
+                ),
+              );
+            },
           ),
-        );
-      },
-    ),
-  ],
-),
+        ],
+      ),
       body: _controller.projects.isEmpty
           ? Center(
-    
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                
                 children: [
                   Icon(
                     Icons.inventory_2_outlined,
                     size: 80,
-                    color: Theme.of(context).colorScheme.outline.withOpacity(0.5),
+                    color: colorScheme.outline.withOpacity(0.5),
                   ),
                   const SizedBox(height: 20),
                   Text(
                     'No projects yet',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.outline,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: colorScheme.outline,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -71,7 +70,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                   Text(
                     'Tap + to create your first project',
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline.withOpacity(0.7),
+                      color: colorScheme.outline.withOpacity(0.7),
                     ),
                   ),
                 ],
@@ -86,10 +85,10 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                   key: Key(project.id),
                   direction: DismissDirection.endToStart,
                   background: Container(
-                    color: Theme.of(context).colorScheme.error,
+                    color: colorScheme.error,
                     alignment: Alignment.centerRight,
                     padding: const EdgeInsets.only(right: 20),
-                    child: Icon(Icons.delete, color: Theme.of(context).colorScheme.onError),
+                    child: Icon(Icons.delete, color: colorScheme.onError),
                   ),
                   confirmDismiss: (_) async {
                     return await _controller.showDeleteProjectDialog(context, project);
@@ -104,18 +103,18 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                       vertical: 8,
                     ),
                     elevation: 2,
-                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    color: colorScheme.primary.withOpacity(0.8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                       side: BorderSide(
-                        color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+                        color: colorScheme.outline.withOpacity(0.1),
                         width: 1,
                       ),
                     ),
                     child: ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                        backgroundColor: colorScheme.surface,
+                        foregroundColor: colorScheme.primary,
                         child: Text(
                           project.name[0].toUpperCase(),
                           style: const TextStyle(
@@ -125,20 +124,20 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                       ),
                       title: Text(
                         project.name,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onSurface,
+                          color: colorScheme.surface.withOpacity(0.8)
                         ),
                       ),
                       subtitle: Text(
                         'Stitches: ${project.stitch.count} | Rounds: ${project.round.count}',
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          color: colorScheme.surface.withOpacity(0.6)// Even softer
                         ),
                       ),
                       trailing: Icon(
                         Icons.chevron_right,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        color: colorScheme.surface.withOpacity(0.8)// Soft chevron
                       ),
                       onTap: () => _controller.navigateToProject(context, project),
                       contentPadding: const EdgeInsets.symmetric(
@@ -162,11 +161,11 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
               return AlertDialog(
                 title: Text(
                   'New Project',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    color: colorScheme.onSurface,
                   ),
                 ),
-                backgroundColor: Theme.of(context).colorScheme.surface,
+                backgroundColor: colorScheme.surface,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -176,34 +175,34 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                   decoration: InputDecoration(
                     labelText: 'Project Name',
                     labelStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      color: colorScheme.onSurfaceVariant,
                     ),
                     hintText: 'Enter project name',
                     hintStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
+                      color: colorScheme.outline,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
+                        color: colorScheme.outline,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: colorScheme.primary,
                         width: 2,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
+                        color: colorScheme.outline,
                       ),
                     ),
                   ),
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
+                    color: colorScheme.onSurface,
                   ),
                 ),
                 actions: [
@@ -212,7 +211,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                     child: Text(
                       'Cancel',
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        color: colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ),
@@ -225,7 +224,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                     child: Text(
                       'Create',
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: colorScheme.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -235,18 +234,14 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
             },
           );
         },
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Icon(
-          Icons.add,
-          color: Theme.of(context).colorScheme.onPrimary,
-        ),
+        child: const Icon(Icons.add),
       ),
-   
-    
     );
   }
 }
