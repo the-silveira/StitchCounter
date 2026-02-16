@@ -7,22 +7,21 @@ import 'package:stitchcounter/widgets/stitchCounterWidget.dart';
 
 class MainScreen extends StatefulWidget {
   final Project project;
-  
+
   const MainScreen({super.key, required this.project});
-  
+
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
   late CounterController _controller;
-  
+
   @override
   void initState() {
     super.initState();
     _controller = CounterController(project: widget.project);
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +38,7 @@ class _MainScreenState extends State<MainScreen> {
             const SizedBox(width: 8),
             Text(
               _controller.project.name,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             const SizedBox(width: 8),
             Icon(
@@ -68,8 +64,8 @@ class _MainScreenState extends State<MainScreen> {
               Expanded(
                 child: StitchCounterWidget(
                   counter: _controller.project.stitch,
-                  onIncrement:  _controller.incrementStitch,
-                  onReset:  _controller.resetStitch,
+                  onIncrement: _controller.incrementStitch,
+                  onReset: _controller.resetStitch,
                   onDecrease: _controller.decreaseStitch,
                 ),
               ),
@@ -77,25 +73,22 @@ class _MainScreenState extends State<MainScreen> {
               Expanded(
                 child: RoundCounterWidget(
                   counter: _controller.project.round,
-                  onIncrement: _controller.incrementRound,
-                  onReset: _controller.resetRound,
-                  onDecrease: _controller.decreaseRound,
+                  onIncrement: () => setState(_controller.incrementRound),
+                  onReset: () => setState(_controller.resetRound),
+                  onDecrease: () => setState(_controller.decreaseRound),
                 ),
               ),
             ],
           );
         },
       ),
-      floatingActionButton: 
-          FloatingActionButton(
-            onPressed: _controller.resetAll,
-            backgroundColor: Theme.of(context).colorScheme.onPrimary,
-            foregroundColor: Theme.of(context).colorScheme.primary,
-            heroTag: 'reset',
-            child: const Icon(Icons.refresh),
-          ),
-        
-      
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => setState(_controller.resetAll),
+        backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        foregroundColor: Theme.of(context).colorScheme.primary,
+        heroTag: 'reset',
+        child: const Icon(Icons.refresh),
+      ),
     );
   }
 }
